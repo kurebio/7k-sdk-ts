@@ -21,7 +21,7 @@ export const buildTx = async ({
   devInspect,
   extendTx,
 }: BuildTxParams) => {
-  const { tx: _tx, coinIn } = extendTx || {};
+  const { tx: _tx, coinIn, coinInDirectly } = extendTx || {};
   let coinOut: TransactionObjectArgument | undefined;
 
   if (!accountAddress) {
@@ -44,7 +44,11 @@ export const buildTx = async ({
 
   let coinData: TransactionResult;
   if (coinIn) {
-    coinData = tx.splitCoins(coinIn, splits);
+    if (coinInDirectly) {
+      coinData = coinIn;
+    } else {
+      coinData = tx.splitCoins(coinIn, splits);
+    }
   } else {
     const { coinData: _data } = await getSplitCoinForTx(
       accountAddress,

@@ -13,6 +13,7 @@ export interface CommonParams {
     tx: Transaction;
     coinIn?: TransactionObjectArgument;
     useCoinInDirectly?: boolean;
+    forceMinOutToZero?: boolean;
   };
 }
 export interface BuildTxParams extends CommonParams {

@@ -14,6 +14,8 @@ export interface CommonParams {
     tx: Transaction;
     coinIn?: TransactionObjectArgument;
     useCoinInDirectly?: boolean;
+    // It's dangerous to set this to true
+    forceMinOutToZero?: boolean;
   };
 }
 

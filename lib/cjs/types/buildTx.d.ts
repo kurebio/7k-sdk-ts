@@ -1,8 +1,8 @@
 import {
   Transaction,
-  TransactionObjectArgument,
+  type TransactionObjectArgument,
 } from "@mysten/sui/transactions";
-import { BuildTxParams } from "./types/tx";
+import type { BuildTxParams } from "./types/tx";
 export declare const buildTx: ({
   quoteResponse,
   accountAddress,

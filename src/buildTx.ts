@@ -22,7 +22,12 @@ export const buildTx = async ({
   devInspect,
   extendTx,
 }: BuildTxParams) => {
-  const { tx: _tx, coinIn, useCoinInDirectly } = extendTx || {};
+  const {
+    tx: _tx,
+    coinIn,
+    useCoinInDirectly,
+    forceMinOutToZero,
+  } = extendTx || {};
   let coinOut: TransactionObjectArgument | undefined;
 
   if (!accountAddress) {
@@ -145,8 +150,10 @@ export const buildTx = async ({
         tx.object(_7K_VAULT),
         coinInAmount ?? tx.pure.u64(quoteResponse.swapAmountWithDecimal),
         mergeCoin,
-        minReceived,
-        tx.pure.u64(quoteResponse.returnAmountWithDecimal),
+        !forceMinOutToZero ? minReceived : tx.pure.u64(0),
+        !forceMinOutToZero
+          ? tx.pure.u64(quoteResponse.returnAmountWithDecimal)
+          : tx.pure.u64(0),
         partner,
         tx.pure.u64(_commission.commissionBps),
       ],

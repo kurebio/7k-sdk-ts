@@ -1,7 +1,7 @@
 import {
   Transaction,
-  TransactionObjectArgument,
-  TransactionResult,
+  type TransactionObjectArgument,
+  type TransactionResult,
 } from "@mysten/sui/transactions";
 import BigNumber from "bignumber.js";
 import { getSplitCoinForTx } from "./libs/getSplitCoinForTx";
@@ -9,7 +9,7 @@ import { groupSwapRoutes } from "./libs/groupSwapRoutes";
 import { swapWithRoute } from "./libs/swapWithRoute";
 import { denormalizeTokenType } from "./utils/token";
 import { SuiUtils } from "./utils/sui";
-import { BuildTxParams } from "./types/tx";
+import type { BuildTxParams } from "./types/tx";
 import { _7K_CONFIG, _7K_PACKAGE_ID, _7K_VAULT } from "./constants/_7k";
 import { isValidSuiAddress } from "@mysten/sui/utils";
 import { MATH_PACKAGE_ID } from "./constants/math";
@@ -63,7 +63,7 @@ export const buildTx = async ({
         coinIn,
         splitPercentages.map((p) =>
           tx.moveCall({
-            target: `${MATH_PACKAGE_ID}::math::mulfactor`,
+            target: `${MATH_PACKAGE_ID}::math::mul_factor`,
             arguments: [
               coinInAmount,
               tx.pure.u64(
@@ -120,7 +120,7 @@ export const buildTx = async ({
       const slippagePrecision = BigNumber(1000000);
       const slippageDecimal = slippagePrecision.multipliedBy(slippage);
       minReceived = tx.moveCall({
-        target: `${MATH_PACKAGE_ID}::math::mulfactor`,
+        target: `${MATH_PACKAGE_ID}::math::mul_factor`,
         arguments: [
           tx.moveCall({
             target: `0x2::coin::value`,

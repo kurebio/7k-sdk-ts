@@ -124,11 +124,7 @@ export const buildTx = async ({
       minReceived = tx.moveCall({
         target: `${MATH_PACKAGE_ID}::math::mul_factor`,
         arguments: [
-          tx.moveCall({
-            target: `0x2::coin::value`,
-            arguments: [coinData],
-            typeArguments: [denormalizeTokenType(quoteResponse.tokenIn)],
-          }),
+          coinInAmount as any,
           tx.pure.u64(slippageDecimal.toFixed(0)),
           tx.pure.u64(slippagePrecision.toFixed(0)),
         ],

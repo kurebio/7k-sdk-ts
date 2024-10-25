@@ -13,6 +13,7 @@ export interface CommonParams {
   extendTx?: {
     tx: Transaction;
     coinIn?: TransactionObjectArgument;
+    useCoinInDirectly?: boolean;
   };
 }
 

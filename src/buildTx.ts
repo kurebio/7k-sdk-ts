@@ -12,6 +12,7 @@ import { SuiUtils } from "./utils/sui";
 import { BuildTxParams } from "./types/tx";
 import { _7K_CONFIG, _7K_PACKAGE_ID, _7K_VAULT } from "./constants/_7k";
 import { isValidSuiAddress } from "@mysten/sui/utils";
+import { MATH_PACKAGE_ID } from "./constants/math";
 
 export const buildTx = async ({
   quoteResponse,
@@ -83,10 +84,23 @@ export const buildTx = async ({
         : coinObjects[0];
     coinOut = mergeCoin;
 
-    const minReceived = new BigNumber(1)
-      .minus(slippage)
-      .multipliedBy(quoteResponse.returnAmountWithDecimal)
-      .toFixed(0);
+    let minReceived: TransactionResult;
+    {
+      const slippagePrecision = BigNumber(1000000);
+      const slippageDecimal = slippagePrecision.multipliedBy(slippage);
+      minReceived = tx.moveCall({
+        target: `${MATH_PACKAGE_ID}::math::mulfactor`,
+        arguments: [
+          tx.moveCall({
+            target: `0x2::coin::value`,
+            arguments: [coinData],
+            typeArguments: [denormalizeTokenType(quoteResponse.tokenIn)],
+          }),
+          tx.pure.u64(slippageDecimal.toFixed(0)),
+          tx.pure.u64(slippagePrecision.toFixed(0)),
+        ],
+      });
+    }
 
     const [partner] = tx.moveCall({
       target: "0x1::option::some",
@@ -102,7 +116,7 @@ export const buildTx = async ({
         tx.object(_7K_VAULT),
         tx.pure.u64(quoteResponse.swapAmountWithDecimal),
         mergeCoin,
-        tx.pure.u64(minReceived),
+        minReceived,
         tx.pure.u64(quoteResponse.returnAmountWithDecimal),
         partner,
         tx.pure.u64(_commission.commissionBps),

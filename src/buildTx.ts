@@ -87,6 +87,12 @@ export const buildTx = async ({
       );
     } else {
       coinData = tx.splitCoins(coinIn, splits);
+      SuiUtils.transferOrDestroyZeroCoin(
+        tx,
+        quoteResponse.tokenIn,
+        coinIn,
+        accountAddress,
+      );
     }
   } else {
     const { coinData: _data } = await getSplitCoinForTx(

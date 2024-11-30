@@ -65,6 +65,35 @@ export declare const SuiUtils: {
     paginationArgs?: PaginationArgs,
   ): Promise<DataPage<any>>;
   isValidStructTag(value: string): boolean;
+  zeroBalance(
+    tx: Transaction,
+    coinType: string,
+  ): {
+    $kind: "NestedResult";
+    NestedResult: [number, number];
+  };
+  coinIntoBalance(
+    tx: Transaction,
+    coinType: string,
+    coinObject: TransactionArgument,
+  ): {
+    $kind: "NestedResult";
+    NestedResult: [number, number];
+  };
+  coinFromBalance(
+    tx: Transaction,
+    coinType: string,
+    balance: TransactionArgument,
+  ): {
+    $kind: "NestedResult";
+    NestedResult: [number, number];
+  };
+  transferOrDestroyZeroCoin(
+    tx: Transaction,
+    coinType: string,
+    coin: TransactionArgument,
+    to?: string,
+  ): void;
 };
 export {};
 //# sourceMappingURL=sui.d.ts.map

@@ -8,6 +8,7 @@ import { SuiswapContract } from "./suiswap";
 import { BluemoveContract } from "./bluemove";
 import { KriyaV3Contract } from "./kriyaV3";
 import { SponsoredDeepBookV3Contract } from "./deepbookV3/sponsored";
+import { BluefinContract } from "./bluefin";
 export declare const ProtocolContract: {
   cetus: typeof CetusContract;
   turbos: typeof TurbosContract;
@@ -19,5 +20,6 @@ export declare const ProtocolContract: {
   deepbook_v3: typeof SponsoredDeepBookV3Contract;
   flowx: typeof FlowXContract;
   kriya_v3: typeof KriyaV3Contract;
+  bluefin: typeof BluefinContract;
 };
 //# sourceMappingURL=index.d.ts.map

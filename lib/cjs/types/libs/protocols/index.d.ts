@@ -9,6 +9,8 @@ import { BluemoveContract } from "./bluemove";
 import { KriyaV3Contract } from "./kriyaV3";
 import { SponsoredDeepBookV3Contract } from "./deepbookV3/sponsored";
 import { BluefinContract } from "./bluefin";
+import { SpringSuiContract } from "./springsui";
+import { ObricContract } from "./obric";
 export declare const ProtocolContract: {
   cetus: typeof CetusContract;
   turbos: typeof TurbosContract;
@@ -21,5 +23,7 @@ export declare const ProtocolContract: {
   flowx: typeof FlowXContract;
   kriya_v3: typeof KriyaV3Contract;
   bluefin: typeof BluefinContract;
+  springsui: typeof SpringSuiContract;
+  obric: typeof ObricContract;
 };
 //# sourceMappingURL=index.d.ts.map

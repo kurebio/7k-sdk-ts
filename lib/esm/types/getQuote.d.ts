@@ -5,6 +5,7 @@ interface Params {
   amountIn: string;
   sources?: SourceDex[];
 }
+export declare const DEFAULT_SOURCES: SourceDex[];
 export declare function getQuote({
   tokenIn,
   tokenOut,

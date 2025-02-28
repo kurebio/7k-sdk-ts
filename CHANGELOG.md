@@ -1,5 +1,73 @@
 # @7kprotocol/sdk-ts
 
+## 2.3.6
+
+### Patch Changes
+
+- Add steamm, magma to default sources
+
+## 2.3.5
+
+### Patch Changes
+
+- New Liquidity sources: Steamm, Magma
+- Fix: apply remote config for turbos, kriya, kriya_v3, obric, springsui, stsui,
+  suiswap
+
+## 2.3.4
+
+### Patch Changes
+
+- Remove Beta tags for Limit Orders and DCA Orders
+
+## 2.3.3
+
+### Patch Changes
+
+- Fix minor issues
+
+## 2.3.2
+
+### Patch Changes
+
+- Update `getTokenPrices` using POST request
+
+## 2.3.1
+
+### Patch Changes
+
+- Support new imports: `@7kprotocol/sdk-ts/esm` (es modules) and
+  `@7kprotocol/sdk-ts/cjs` (commonjs)
+
+## 2.3.0
+
+### Minor Changes
+
+- Added package configuration from the aggregator API.
+- Supported `targetPools` and `excludedPools` params in `getQuote`
+- New Liquidity sources: Flowx V3
+
+## 2.2.2
+
+### Patch Changes
+
+- Update bluefin package
+
+## 2.2.1
+
+### Patch Changes
+
+- Update stsui package
+
+## 2.2.0
+
+### Minor Changes
+
+- Add Limit Orders (Beta)
+- Add DCA Orders (Beta)
+- Add NodeJS code example
+- New Liquidity sources: stSUI
+
 ## 2.1.7
 
 ### Patch Changes
@@ -31,7 +99,7 @@ const { tx: extendedTx, coinOut } = buildTx({
 });
 // no need to consume the coinIn after the swap anymore
 // extendedTx.transferObjects([coinIn], address);
-// continute to use coinOut or transfer it back to the sender as normal to complete the transaction.
+// continue to use coinOut or transfer it back to the sender as normal to complete the transaction.
 ```
 
 ## 2.1.4

@@ -1,22 +1,52 @@
 export * from "./types/aggregator";
 import { getSuiClient, setSuiClient } from "./suiClient";
-import { getQuote } from "./getQuote";
-import { getSuiPrice } from "./getSuiPrice";
-import { estimateGasFee } from "./estimateGasFee";
-import { buildTx } from "./buildTx";
+import { getTokenPrice, getTokenPrices, getSuiPrice } from "./features/prices";
+import {
+  buildTx,
+  getQuote,
+  estimateGasFee,
+  getSwapHistory,
+} from "./features/swap";
+import {
+  placeLimitOrder,
+  getOpenLimitOrders,
+  cancelLimitOrder,
+  claimExpiredLimitOrder,
+  getClosedLimitOrders,
+  placeDcaOrder,
+  getOpenDcaOrders,
+  cancelDcaOrder,
+  getClosedDcaOrders,
+  getDcaOrderExecutions,
+} from "./features/limitDca";
 export {
   getSuiClient,
   setSuiClient,
-  getQuote,
+  getTokenPrice,
+  getTokenPrices,
   getSuiPrice,
+  getQuote,
   estimateGasFee,
   buildTx,
+  getSwapHistory,
+  placeLimitOrder,
+  getOpenLimitOrders,
+  cancelLimitOrder,
+  claimExpiredLimitOrder,
+  getClosedLimitOrders,
+  placeDcaOrder,
+  getOpenDcaOrders,
+  cancelDcaOrder,
+  getClosedDcaOrders,
+  getDcaOrderExecutions,
 };
 declare const _default: {
   getSuiClient: typeof getSuiClient;
   setSuiClient: typeof setSuiClient;
-  getQuote: typeof getQuote;
+  getTokenPrice: typeof getTokenPrice;
+  getTokenPrices: typeof getTokenPrices;
   getSuiPrice: typeof getSuiPrice;
+  getQuote: typeof getQuote;
   estimateGasFee: typeof estimateGasFee;
   buildTx: ({
     quoteResponse,
@@ -31,6 +61,17 @@ declare const _default: {
       | import("@mysten/sui/dist/cjs/transactions").TransactionObjectArgument
       | undefined;
   }>;
+  getSwapHistory: typeof getSwapHistory;
+  placeLimitOrder: typeof placeLimitOrder;
+  getOpenLimitOrders: typeof getOpenLimitOrders;
+  cancelLimitOrder: typeof cancelLimitOrder;
+  claimExpiredLimitOrder: typeof claimExpiredLimitOrder;
+  getClosedLimitOrders: typeof getClosedLimitOrders;
+  placeDcaOrder: typeof placeDcaOrder;
+  getOpenDcaOrders: typeof getOpenDcaOrders;
+  cancelDcaOrder: typeof cancelDcaOrder;
+  getClosedDcaOrders: typeof getClosedDcaOrders;
+  getDcaOrderExecutions: typeof getDcaOrderExecutions;
 };
 export default _default;
 //# sourceMappingURL=index.d.ts.map

@@ -1,0 +1,15 @@
+import { DcaOrder } from "./types";
+interface Params {
+  owner: string;
+  offset: number;
+  limit: number;
+  tokenPair?: string;
+}
+export declare function getOpenDcaOrders({
+  owner,
+  offset,
+  limit,
+  tokenPair,
+}: Params): Promise<DcaOrder[]>;
+export {};
+//# sourceMappingURL=getOpenDcaOrders.d.ts.map

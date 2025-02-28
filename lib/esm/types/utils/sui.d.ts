@@ -72,6 +72,13 @@ export declare const SuiUtils: {
     $kind: "NestedResult";
     NestedResult: [number, number];
   };
+  zeroCoin(
+    tx: Transaction,
+    coinType: string,
+  ): {
+    $kind: "NestedResult";
+    NestedResult: [number, number];
+  };
   coinIntoBalance(
     tx: Transaction,
     coinType: string,

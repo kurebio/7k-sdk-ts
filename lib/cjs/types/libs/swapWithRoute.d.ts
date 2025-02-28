@@ -1,15 +1,17 @@
 import { Transaction } from "@mysten/sui/transactions";
-import { TxSorSwap } from "../types/aggregator";
+import { Config, TxSorSwap } from "../types/aggregator";
 import { TransactionResultItem } from "../types/sui";
 export declare function swapWithRoute({
   route,
   inputCoinObject,
   currentAccount,
+  config,
   tx,
 }: {
   route: TxSorSwap[];
   inputCoinObject: TransactionResultItem;
   currentAccount: string;
+  config: Config;
   tx: Transaction;
 }): Promise<TransactionResultItem | undefined>;
 //# sourceMappingURL=swapWithRoute.d.ts.map

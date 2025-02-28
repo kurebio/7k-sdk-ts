@@ -9,9 +9,13 @@ export type SourceDex =
   | "deepbook"
   | "deepbook_v3"
   | "flowx"
+  | "flowx_v3"
   | "bluefin"
   | "springsui"
-  | "obric";
+  | "obric"
+  | "stsui"
+  | "steamm"
+  | "magma";
 export type SorSwap = {
   poolId: string;
   assetInIndex: number;
@@ -78,5 +82,60 @@ export interface TxSorSwap extends SorSwap {
 export interface Commission {
   partner: string;
   commissionBps: number;
+}
+export interface DexConfig {
+  package: string;
+  name: string;
+  url?: string;
+  image?: string;
+}
+export interface Config {
+  aftermath: DexConfig & {
+    poolRegistry: string;
+    protocolFeeVault: string;
+    treasury: string;
+    insuranceFund: string;
+    referralVault: string;
+  };
+  bluefin: DexConfig & {
+    globalConfig: string;
+  };
+  bluemove: DexConfig & {
+    dexInfo: string;
+  };
+  cetus: DexConfig & {
+    globalConfig: string;
+  };
+  deepbook: DexConfig;
+  deepbook_v3: DexConfig & {
+    sponsor: string;
+    sponsorFund: string;
+  };
+  flowx: DexConfig & {
+    container: string;
+  };
+  flowx_v3: DexConfig & {
+    registry: string;
+    version: string;
+  };
+  kriya: DexConfig;
+  kriya_v3: DexConfig & {
+    version: string;
+  };
+  obric: DexConfig & {
+    pythState: string;
+  };
+  springsui: DexConfig;
+  stsui: DexConfig;
+  suiswap: DexConfig;
+  turbos: DexConfig & {
+    version: string;
+  };
+  steamm: DexConfig & {
+    script: string;
+  };
+  magma: DexConfig & {
+    globalConfig: string;
+  };
 }
 //# sourceMappingURL=aggregator.d.ts.map

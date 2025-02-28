@@ -11,6 +11,10 @@ import { SponsoredDeepBookV3Contract } from "./deepbookV3/sponsored";
 import { BluefinContract } from "./bluefin";
 import { SpringSuiContract } from "./springsui";
 import { ObricContract } from "./obric";
+import { StSuiContract } from "./stsui";
+import { FlowxV3Contract } from "./flowxV3";
+import { SteammContract } from "./steamm";
+import { MagmaContract } from "./magma";
 export declare const ProtocolContract: {
   cetus: typeof CetusContract;
   turbos: typeof TurbosContract;
@@ -21,9 +25,13 @@ export declare const ProtocolContract: {
   deepbook: typeof DeepBookContract;
   deepbook_v3: typeof SponsoredDeepBookV3Contract;
   flowx: typeof FlowXContract;
+  flowx_v3: typeof FlowxV3Contract;
   kriya_v3: typeof KriyaV3Contract;
   bluefin: typeof BluefinContract;
   springsui: typeof SpringSuiContract;
   obric: typeof ObricContract;
+  stsui: typeof StSuiContract;
+  steamm: typeof SteammContract;
+  magma: typeof MagmaContract;
 };
 //# sourceMappingURL=index.d.ts.map

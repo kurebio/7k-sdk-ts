@@ -1,6 +1,6 @@
 {
   "name": "@7kprotocol/sdk-ts",
-  "version": "2.1.7",
+  "version": "2.3.6",
   "description": "",
   "exports": {
     ".": {
@@ -12,6 +12,14 @@
         "types": "./lib/cjs/types/index.d.ts",
         "default": "./lib/cjs/index.js"
       }
+    },
+    "./esm": {
+      "types": "./lib/esm/types/index.d.ts",
+      "default": "./lib/esm/index.mjs"
+    },
+    "./cjs": {
+      "types": "./lib/cjs/types/index.d.ts",
+      "default": "./lib/cjs/index.js"
     }
   },
   "types": "./lib/cjs/types/index.d.ts",
@@ -32,7 +40,7 @@
     "build:esm": "tsc -p ./configs/tsconfig.esm.json && mv lib/esm/index.js lib/esm/index.mjs",
     "build:cjs": "tsc -p ./configs/tsconfig.cjs.json",
     "prepack": "npm run build",
-    "test": "mocha",
+    "test": "mocha --timeout 5000",
     "publish:patch": "npm version patch --no-git-tag-version && npm publish --access public",
     "publish:minor": "npm version minor --no-git-tag-version && npm publish --access public",
     "publish:major": "npm version major --no-git-tag-version && npm publish --access public"
@@ -63,7 +71,7 @@
     "typescript-eslint": "^7.15.0"
   },
   "peerDependencies": {
-    "@mysten/sui": "^1.5.0",
+    "@mysten/sui": "^1.17.0",
     "bignumber.js": "^9.1.2",
     "bn.js": "^5.2.1"
   }

@@ -1,6 +1,7 @@
 import { Transaction, TransactionResult } from "@mysten/sui/transactions";
-import { getCoinOjectIdsByAmount } from "./getCoinOjectIdsByAmount";
+import { normalizeStructTag } from "@mysten/sui/utils";
 import { SUI_TYPE } from "../constants/tokens";
+import { getCoinOjectIdsByAmount } from "./getCoinOjectIdsByAmount";
 
 export const getSplitCoinForTx = async (
   account: string,
@@ -9,6 +10,7 @@ export const getSplitCoinForTx = async (
   coinType: string,
   inheritTx?: Transaction,
   inspecTransaction?: boolean,
+  isSponsored = false,
 ): Promise<{
   tx: Transaction;
   coinData: TransactionResult;
@@ -20,7 +22,10 @@ export const getSplitCoinForTx = async (
     coinType,
   );
   const coinObjectId: any = objectIds[0];
-  if (coinType === SUI_TYPE) {
+  if (
+    normalizeStructTag(coinType) === normalizeStructTag(SUI_TYPE) &&
+    !isSponsored
+  ) {
     let coin;
     if (inspecTransaction) {
       if (objectIds.length > 1) {

@@ -1,5 +1,48 @@
 # @7kprotocol/sdk-ts
 
+## 3.0.1
+
+### Patch Changes
+
+- Fix: transfer or destroy zero `coinIn` after being splited instead of
+  collecting as dust
+- Update DEX package configs
+
+## 3.0.0
+
+### Major Changes
+
+- New version of contract to optimize gas fees.
+- Sunsetting Deepbook V2
+- Support to quote, build and execute BluefinX transaction
+- Remove peer dependecies: `bn.js`, `bignumber.js`
+- Require `@pythnetwork/pyth-sui-js` as peer dependency
+
+### Minor Changes
+
+- New dex sources: Haedal PMM, Steamm Oracle Quoter, Momentum
+- New quote params: `commissionBps?: number` and return
+  `returnAmountAfterCommission`, `returnAmountAfterCommissionWithDecimal` in
+  quote response
+
+## 2.4.1
+
+### Patch Changes
+
+- Add optional `isSponsored` param for sponsored transactions
+
+## 2.4.0
+
+### Minor Changes
+
+- Support custom API key
+
+## 2.3.7
+
+### Patch Changes
+
+- Add optional `isSponsored` param for sponsored transactions
+
 ## 2.3.6
 
 ### Patch Changes

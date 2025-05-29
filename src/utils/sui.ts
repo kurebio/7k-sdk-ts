@@ -1,12 +1,13 @@
-import { TransactionArgument, Transaction } from "@mysten/sui/transactions";
 import {
   CoinStruct,
   PaginatedObjectsResponse,
   SuiObjectResponseQuery,
 } from "@mysten/sui/client";
+import { Transaction, TransactionArgument } from "@mysten/sui/transactions";
 import { parseStructTag } from "@mysten/sui/utils";
+import { Config } from "../config";
+import { _7K_CONFIG, _7K_PACKAGE_ID, _7K_VAULT } from "../constants/_7k";
 import { checkIsSui } from "./token";
-import { getSuiClient } from "../suiClient";
 
 type DataPage<T> = {
   data: T[];
@@ -161,7 +162,7 @@ export const SuiUtils = {
 
     do {
       try {
-        const res = await getSuiClient().getCoins({
+        const res = await Config.getSuiClient().getCoins({
           owner: address,
           coinType: type,
           cursor: cursor,
@@ -223,7 +224,7 @@ export const SuiUtils = {
     let nextCursor = queryAll ? null : paginationArgs.cursor;
     do {
       const res: PaginatedObjectsResponse =
-        await getSuiClient().getOwnedObjects({
+        await Config.getSuiClient().getOwnedObjects({
           owner,
           ...query,
           cursor: nextCursor,
@@ -289,18 +290,24 @@ export const SuiUtils = {
     })[0];
   },
 
+  collectDust(tx: Transaction, coinType: string, coin: TransactionArgument) {
+    tx.moveCall({
+      target: `${_7K_PACKAGE_ID}::vault::collect_dust`,
+      typeArguments: [coinType],
+      arguments: [tx.object(_7K_VAULT), tx.object(_7K_CONFIG), coin],
+    });
+  },
+
   transferOrDestroyZeroCoin(
     tx: Transaction,
     coinType: string,
     coin: TransactionArgument,
-    to?: string,
+    address: string,
   ) {
     tx.moveCall({
-      target: `0x6f5e582ede61fe5395b50c4a449ec11479a54d7ff8e0158247adfda60d98970b::utils::${
-        to ? "send_coin" : "transfer_coin_to_sender"
-      }`,
+      target: `${_7K_PACKAGE_ID}::utils::transfer_or_destroy`,
       typeArguments: [coinType],
-      arguments: [coin, ...(to ? [tx.pure.address(to)] : [])],
+      arguments: [coin, tx.pure.address(address)],
     });
   },
 };

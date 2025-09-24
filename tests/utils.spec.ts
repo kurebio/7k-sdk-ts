@@ -1,7 +1,6 @@
 import { SuiClient } from "@mysten/sui/client";
 import { assert } from "chai";
 import { buildTx, getQuote, isBluefinXRouting, SourceDex } from "../src";
-import { _7K_PACKAGE_ID } from "../src/constants/_7k";
 import { BluefinXTx } from "../src/libs/protocols/bluefinx/types";
 
 interface Params {
@@ -48,9 +47,12 @@ export const testSwap = async (
     transactionBlock: tx,
   });
 
-  assert(result.effects.status.status === "success", "Transaction failed");
-  const swapEvent = result.events.find(
-    (e) => e.type === `${_7K_PACKAGE_ID}::settle::Swap`,
+  assert(
+    result.effects.status.status === "success",
+    `Transaction failed: ${result.error}`,
+  );
+  const swapEvent = result.events.find((e) =>
+    e.type.endsWith("::settle::Swap"),
   )?.parsedJson;
 
   // console.log(swapEvent);

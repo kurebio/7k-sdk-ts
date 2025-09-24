@@ -23,9 +23,12 @@ export type SourceDex =
   | "stsui"
   | "steamm"
   | "steamm_oracle_quoter"
+  | "steamm_oracle_quoter_v2"
   | "magma"
   | "haedal_pmm"
-  | "momentum";
+  | "momentum"
+  | "sevenk_v1"
+  | "fullsail";
 
 export type SorSwap = {
   poolId: string;
@@ -133,11 +136,17 @@ export interface Config {
   magma: DexConfig & { globalConfig: string };
   haedal_pmm: DexConfig;
   momentum: DexConfig & { version: string };
+  sevenk_v1: DexConfig & { oracle: string };
+  fullsail: DexConfig & {
+    globalConfig: string;
+    rewarderGlobalVault: string;
+    priceProvider: string;
+    stats: string;
+  };
 }
 
 export type ExtraOracle = {
-  Pyth?: { price_identifier: { bytes: number[] } };
-  Switchboard?: { object_id: string };
+  Pyth?: { bytes: number[] };
 };
 
 export type AggregatorTx = Transaction | BluefinXTx;

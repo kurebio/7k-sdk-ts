@@ -14,13 +14,16 @@ import { BluefinXTx } from "../../libs/protocols/bluefinx/types";
 import { swapWithRoute } from "../../libs/swapWithRoute";
 import {
   BuildTxResult,
+  ExtraOracle,
   isBluefinXRouting,
   QuoteResponse,
+  TxSorSwap,
 } from "../../types/aggregator";
 import { BuildTxParams } from "../../types/tx";
 import { SuiUtils } from "../../utils/sui";
 import { denormalizeTokenType } from "../../utils/token";
 import { getConfig } from "./config";
+import { ORACLE_BASED_SOURCES } from "./getQuote";
 
 export const buildTx = async ({
   quoteResponse,
@@ -59,6 +62,7 @@ export const buildTx = async ({
   const tx = _tx || new Transaction();
 
   const routes = groupSwapRoutes(quoteResponse);
+  validateRoutes(routes, isSponsored);
 
   const splits = routes.map((group) => group[0]?.amount ?? "0");
 
@@ -173,16 +177,17 @@ export const buildTx = async ({
 };
 
 const getPythPriceFeeds = (res: QuoteResponse) => {
-  const ids: string[] = [];
+  const ids: Set<string> = new Set();
   for (const s of res.swaps) {
-    for (const o of s.extra?.oracles || []) {
-      const bytes = o.Pyth?.price_identifier?.bytes;
+    for (const o of (s.extra?.oracles || []) as ExtraOracle[]) {
+      // FIXME: deprecation price_identifier in the next version
+      const bytes = o.Pyth?.bytes || (o.Pyth as any)?.price_identifier?.bytes;
       if (bytes) {
-        ids.push("0x" + toHex(Uint8Array.from(bytes)));
+        ids.add("0x" + toHex(Uint8Array.from(bytes)));
       }
     }
   }
-  return ids;
+  return Array.from(ids);
 };
 
 const updatePythPriceFeedsIfAny = async (
@@ -205,4 +210,16 @@ const updatePythPriceFeedsIfAny = async (
     });
   }
   return pythMap;
+};
+
+const validateRoutes = (routes: TxSorSwap[][], isSponsored?: boolean) => {
+  if (!isSponsored) {
+    return;
+  }
+  const hasOracleBasedSource = routes.some((g) =>
+    g.some((s) => ORACLE_BASED_SOURCES.has(s.pool.type)),
+  );
+  if (hasOracleBasedSource) {
+    throw new Error("Oracle based sources are not supported for sponsored tx");
+  }
 };

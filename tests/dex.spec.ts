@@ -1,12 +1,17 @@
 import "mocha";
 
 import { getFullnodeUrl, SuiClient } from "@mysten/sui/client";
+import { normalizeSuiAddress } from "@mysten/sui/utils";
+import { expect } from "chai";
 import { SUI_TYPE } from "../src/constants/tokens";
-import { setSuiClient } from "../src/index";
+import { ORACLE_BASED_SOURCES } from "../src/features/swap";
+import { buildTx, Config, getQuote } from "../src/index";
 import { testSwap } from "./utils.spec";
 
 const testAccount =
-  "0xee34ad8d735cf8c4d984807a4a315a0f007f9c0ba2e0bd097267e2e70d512070";
+  "0x935029ca5219502a47ac9b69f556ccf6e2198b5e7815cf50f68846f723739cbd";
+const testAccount2 =
+  "0xec522ec6182e9e58446a4b870ea21ce3350a033b5923c8657d99b76706cc2601";
 const WAL =
   "0x356a26eb9e012a68958082340d4c4116e7f55615cf27affcff209cf0ae544f59::wal::WAL";
 const USDC =
@@ -19,7 +24,8 @@ const amountX = "1000000000"; // 1 SUI
 const amountY = "10000000"; // 10 USDC
 
 const client = new SuiClient({ url: getFullnodeUrl("mainnet") });
-setSuiClient(client);
+Config.setSuiClient(client);
+Config.setApiKey(process.env.API_KEY || "");
 describe("Cetus test", () => {
   it("should routing success for cetus x for y", async () => {
     await testSwap(client, testAccount, {
@@ -309,20 +315,74 @@ describe("Momentum test", () => {
   });
 });
 describe("Steamm oracle quoter test", () => {
-  // it("should routing success for steamm oracle quoter x for y", async () => {
-  //   await testSwap(client, testAccount, {
-  //     amountIn: amountX,
-  //     tokenIn: tokenX,
-  //     tokenOut: tokenY,
-  //     sources: ["steamm_oracle_quoter"],
-  //   });
-  // });
-  it("should routing success for steamm oracle quoter y for x", async () => {
-    await testSwap(client, testAccount, {
-      amountIn: amountY,
-      tokenIn: USDC,
+  it("should routing success for steamm oracle quoter x for y", async () => {
+    await testSwap(client, testAccount2, {
+      amountIn: amountX,
+      tokenIn: tokenX,
       tokenOut: WAL,
       sources: ["steamm_oracle_quoter"],
+    });
+  });
+  it("should routing success for steamm oracle quoter y for x", async () => {
+    await testSwap(client, testAccount2, {
+      amountIn: amountY,
+      tokenIn: WAL,
+      tokenOut: tokenX,
+      sources: ["steamm_oracle_quoter"],
+    });
+  });
+});
+// describe("Steamm oracle quoter v2 test", () => {
+//   it("should routing success for steamm oracle quoter v2 x for y", async () => {
+//     await testSwap(client, testAccount, {
+//       amountIn: amountX,
+//       tokenIn: tokenX,
+//       tokenOut: tokenY,
+//       sources: ["steamm_oracle_quoter_v2"],
+//     });
+//   });
+//   it("should routing success for steamm oracle quoter v2 y for x", async () => {
+//     await testSwap(client, testAccount, {
+//       amountIn: amountY,
+//       tokenIn: tokenY,
+//       tokenOut: tokenX,
+//       sources: ["steamm_oracle_quoter_v2"],
+//     });
+//   });
+// });
+describe("SevenK V1 test", () => {
+  it("should routing success for sevenk v1 x for y", async () => {
+    await testSwap(client, testAccount, {
+      amountIn: amountX,
+      tokenIn: tokenX,
+      tokenOut: tokenY,
+      sources: ["sevenk_v1"],
+    });
+  });
+  it("should routing success for sevenk v1 y for x", async () => {
+    await testSwap(client, testAccount, {
+      amountIn: amountY,
+      tokenIn: tokenY,
+      tokenOut: tokenX,
+      sources: ["sevenk_v1"],
+    });
+  });
+});
+describe("Full Sail test", () => {
+  it("should routing success for Full Sail x for y", async () => {
+    await testSwap(client, testAccount, {
+      amountIn: amountX,
+      tokenIn: tokenX,
+      tokenOut: tokenY,
+      sources: ["fullsail"],
+    });
+  });
+  it("should routing success for Full Sail y for x", async () => {
+    await testSwap(client, testAccount, {
+      amountIn: amountY,
+      tokenIn: tokenY,
+      tokenOut: tokenX,
+      sources: ["fullsail"],
     });
   });
 });
@@ -340,5 +400,36 @@ describe("All sources test", () => {
       tokenIn: tokenY,
       tokenOut: tokenX,
     });
+  });
+});
+describe("sponsored tx", () => {
+  it("should validate sponsored tx", async () => {
+    const quote = await getQuote({
+      amountIn: amountX,
+      tokenIn: tokenX,
+      tokenOut: tokenY,
+      sources: [...ORACLE_BASED_SOURCES],
+    });
+
+    try {
+      await buildTx({
+        quoteResponse: quote,
+        accountAddress: testAccount,
+        slippage: 0.01,
+        commission: {
+          commissionBps: 0,
+          partner: normalizeSuiAddress("0x0"),
+        },
+        isSponsored: true,
+      });
+      // If we reach here, the function didn't throw an error, so the test should fail
+      expect.fail(
+        "Expected buildTx to throw an error for sponsored tx with oracle sources",
+      );
+    } catch (error) {
+      expect(error.message).to.equal(
+        "Oracle based sources are not supported for sponsored tx",
+      );
+    }
   });
 });

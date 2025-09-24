@@ -23,6 +23,8 @@ interface Params {
   excludedPools?: string[];
   /** The taker address, required for bluefinx */
   taker?: string;
+  /** If true, excludes all liquidity sources that depend on pyth price feeds - pyth client use tx.gas to pay the fee*/
+  isSponsored?: boolean;
 }
 
 export const DEFAULT_SOURCES: SourceDex[] = [
@@ -42,21 +44,37 @@ export const DEFAULT_SOURCES: SourceDex[] = [
   "stsui",
   "steamm",
   "steamm_oracle_quoter",
+  "steamm_oracle_quoter_v2",
   "magma",
   "haedal_pmm",
   "momentum",
+  "sevenk_v1",
+  "fullsail",
 ];
+
+export const ORACLE_BASED_SOURCES = new Set<SourceDex>([
+  "obric",
+  "haedal_pmm",
+  "sevenk_v1",
+  "steamm_oracle_quoter",
+  "steamm_oracle_quoter_v2",
+]);
 
 export async function getQuote({
   tokenIn,
   tokenOut,
   amountIn,
-  sources = DEFAULT_SOURCES,
+  sources: _sources = DEFAULT_SOURCES,
   commissionBps,
   targetPools,
   excludedPools,
   taker,
+  isSponsored,
 }: Params) {
+  let sources = _sources;
+  if (isSponsored) {
+    sources = _sources.filter((s) => !ORACLE_BASED_SOURCES.has(s));
+  }
   const params = new URLSearchParams({
     amount: amountIn,
     from: normalizeStructTag(tokenIn),
@@ -81,7 +99,13 @@ export async function getQuote({
   const response = await fetchClient(`${API_ENDPOINTS.MAIN}/quote?${params}`);
 
   if (!response.ok) {
-    throw new Error("Failed to fetch aggregator quote");
+    let responseText: string;
+    try {
+      responseText = await response.text();
+    } catch {
+      responseText = "Failed to fetch aggregator quote";
+    }
+    throw new Error(responseText);
   }
 
   const quoteResponse = (await response.json()) as QuoteResponse;

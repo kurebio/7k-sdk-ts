@@ -1,5 +1,53 @@
 # @7kprotocol/sdk-ts
 
+## 3.4.1
+
+### Patch Changes
+
+- Add an optional `isSponsored` parameter to `getQuote` – automatically excludes
+  all liquidity sources that rely on Pyth price feeds for sponsored swaps.
+
+## 3.4.0
+
+### Minor Changes
+
+- New liquidity: Full Sail
+
+## 3.3.1
+
+### Patch Changes
+
+- Add BluefinX API key config
+
+## 3.3.0
+
+### Minor Changes
+
+- Send commission directly to partner address after swap
+
+## 3.2.0
+
+### Minor Changes
+
+- New liquidity: SevenK V1.
+
+## 3.1.0
+
+### Minor Changes
+
+- Upgrade @mysten/sui SDK.
+- New liquidity: Steamm oracle quoter v2.
+
+### Patch Changes
+
+- Refactor oracle based DEX command.
+
+## 3.0.2
+
+### Patch Changes
+
+- Fix: Redundant price updates
+
 ## 3.0.1
 
 ### Patch Changes
